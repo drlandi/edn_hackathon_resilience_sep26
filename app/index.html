@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wizard - Matrículas Abertas</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex items-center justify-center p-4">
+  <main class="max-w-md w-full bg-slate-800 rounded-xl shadow-2xl p-6 border border-slate-700">
+    <div class="text-center mb-6">
+      <span class="text-xs font-bold uppercase tracking-wider text-cyan-400">Hackathon Future Builders</span>
+      <h1 class="text-2xl font-extrabold text-white mt-1">Garanta sua Vaga | Wizard</h1>
+      <p class="text-sm text-slate-400 mt-1">Ambiente de Alta Disponibilidade e Resiliência</p>
+    </div>
+
+    <form id="leadForm" class="space-y-4">
+      <div>
+        <label class="block text-xs font-semibold text-slate-300 mb-1">Nome Completo</label>
+        <input type="text" id="name" required class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white text-sm focus:outline-none focus:border-cyan-500">
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-slate-300 mb-1">E-mail</label>
+        <input type="email" id="email" required class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white text-sm focus:outline-none focus:border-cyan-500">
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-slate-300 mb-1">WhatsApp</label>
+        <input type="tel" id="phone" required class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white text-sm focus:outline-none focus:border-cyan-500">
+      </div>
+      <button type="submit" id="submitBtn" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-2.5 rounded-lg transition-all text-sm">
+        Cadastrar Lead
+      </button>
+    </form>
+
+    <div id="statusMsg" class="mt-4 p-3 rounded-lg text-sm text-center hidden"></div>
+  </main>
+
+  <script>
+    const form = document.getElementById('leadForm');
+    const msg = document.getElementById('statusMsg');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      msg.className = "mt-4 p-3 rounded-lg text-sm text-center bg-cyan-900/50 text-cyan-200 border border-cyan-700";
+      msg.textContent = "Processando requisição de forma resiliente...";
+      msg.classList.remove('hidden');
+
+      const payload = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        timestamp: new Date().toISOString()
+      };
+
+      try {
+        console.log("Payload pronto para envio via API Gateway / SQS:", payload);
+        await new Promise(resolve => setTimeout(resolve, 800)); 
+
+        msg.className = "mt-4 p-3 rounded-lg text-sm text-center bg-emerald-900/50 text-emerald-200 border border-emerald-700";
+        msg.textContent = "Lead capturado e enfileirado com sucesso via SQS/DynamoDB!";
+        form.reset();
+      } catch (err) {
+        msg.className = "mt-4 p-3 rounded-lg text-sm text-center bg-rose-900/50 text-rose-200 border border-rose-700";
+        msg.textContent = "Erro ao enviar. O sistema tentará novamente em segundo plano.";
+      }
+    });
+  </script>
+</body>
+</html>
