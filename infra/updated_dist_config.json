@@ -1,0 +1,166 @@
+{
+  "CallerReference": "wizard-dist-1787916193",
+  "Aliases": {
+    "Quantity": 0
+  },
+  "DefaultRootObject": "index.html",
+  "Origins": {
+    "Quantity": 2,
+    "Items": [
+      {
+        "Id": "S3-Failover-us-east-1",
+        "DomainName": "wizard-g5-failover-us-east-1-drlandi.s3.us-east-1.amazonaws.com",
+        "OriginPath": "",
+        "CustomHeaders": {
+          "Quantity": 0
+        },
+        "S3OriginConfig": {
+          "OriginAccessIdentity": "",
+          "OriginReadTimeout": 30
+        },
+        "ConnectionAttempts": 3,
+        "ConnectionTimeout": 10,
+        "OriginShield": {
+          "Enabled": false
+        },
+        "OriginAccessControlId": "E3UW75254R1KM8"
+      },
+      {
+        "Id": "S3-Primary-sa-east-1",
+        "DomainName": "wizard-g5-primary-sa-east-1-drlandi.s3.sa-east-1.amazonaws.com",
+        "OriginPath": "",
+        "CustomHeaders": {
+          "Quantity": 0
+        },
+        "S3OriginConfig": {
+          "OriginAccessIdentity": "",
+          "OriginReadTimeout": 30
+        },
+        "ConnectionAttempts": 3,
+        "ConnectionTimeout": 10,
+        "OriginShield": {
+          "Enabled": false
+        },
+        "OriginAccessControlId": "E3UW75254R1KM8"
+      }
+    ]
+  },
+  "OriginGroups": {
+    "Quantity": 1,
+    "Items": [
+      {
+        "Id": "WizardOriginGroup",
+        "FailoverCriteria": {
+          "StatusCodes": {
+            "Quantity": 6,
+            "Items": [
+              403,
+              404,
+              500,
+              502,
+              503,
+              504
+            ]
+          }
+        },
+        "Members": {
+          "Quantity": 2,
+          "Items": [
+            {
+              "OriginId": "S3-Primary-sa-east-1"
+            },
+            {
+              "OriginId": "S3-Failover-us-east-1"
+            }
+          ]
+        },
+        "SelectionCriteria": "default"
+      }
+    ]
+  },
+  "DefaultCacheBehavior": {
+    "TargetOriginId": "WizardOriginGroup",
+    "TrustedSigners": {
+      "Enabled": false,
+      "Quantity": 0
+    },
+    "TrustedKeyGroups": {
+      "Enabled": false,
+      "Quantity": 0
+    },
+    "ViewerProtocolPolicy": "redirect-to-https",
+    "AllowedMethods": {
+      "Quantity": 2,
+      "Items": [
+        "HEAD",
+        "GET"
+      ],
+      "CachedMethods": {
+        "Quantity": 2,
+        "Items": [
+          "HEAD",
+          "GET"
+        ]
+      }
+    },
+    "SmoothStreaming": false,
+    "Compress": true,
+    "LambdaFunctionAssociations": {
+      "Quantity": 0
+    },
+    "FunctionAssociations": {
+      "Quantity": 0
+    },
+    "FieldLevelEncryptionId": "",
+    "GrpcConfig": {
+      "Enabled": false
+    },
+    "ForwardedValues": {
+      "QueryString": false,
+      "Cookies": {
+        "Forward": "none"
+      },
+      "Headers": {
+        "Quantity": 0
+      },
+      "QueryStringCacheKeys": {
+        "Quantity": 0
+      }
+    },
+    "MinTTL": 0,
+    "DefaultTTL": 86400,
+    "MaxTTL": 31536000
+  },
+  "CacheBehaviors": {
+    "Quantity": 0
+  },
+  "CustomErrorResponses": {
+    "Quantity": 0
+  },
+  "Comment": "Wizard Lead Capture Global CDN with Regional Failover",
+  "Logging": {
+    "Enabled": false,
+    "IncludeCookies": false,
+    "Bucket": "",
+    "Prefix": ""
+  },
+  "PriceClass": "PriceClass_All",
+  "Enabled": true,
+  "ViewerCertificate": {
+    "CloudFrontDefaultCertificate": true,
+    "SSLSupportMethod": "vip",
+    "MinimumProtocolVersion": "TLSv1",
+    "CertificateSource": "cloudfront"
+  },
+  "Restrictions": {
+    "GeoRestriction": {
+      "RestrictionType": "none",
+      "Quantity": 0
+    }
+  },
+  "WebACLId": "arn:aws:wafv2:us-east-1:564580819140:global/webacl/WizardEdgeWAF/c4638ae9-d20b-458e-8270-3cf4f791344a",
+  "HttpVersion": "http2",
+  "IsIPV6Enabled": true,
+  "ContinuousDeploymentPolicyId": "",
+  "Staging": false
+}

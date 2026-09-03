@@ -1,0 +1,68 @@
+{
+  "CallerReference": "wizard-dist-1787916193",
+  "Comment": "Wizard Lead Capture Global CDN with Regional Failover",
+  "DefaultRootObject": "index.html",
+  "Origins": {
+    "Quantity": 2,
+    "Items": [
+      {
+        "Id": "S3-Primary-sa-east-1",
+        "DomainName": "wizard-g5-primary-sa-east-1-drlandi.s3.sa-east-1.amazonaws.com",
+        "OriginAccessControlId": "E3UW75254R1KM8",
+        "S3OriginConfig": {
+          "OriginAccessIdentity": ""
+        }
+      },
+      {
+        "Id": "S3-Failover-us-east-1",
+        "DomainName": "wizard-g5-failover-us-east-1-drlandi.s3.us-east-1.amazonaws.com",
+        "OriginAccessControlId": "E3UW75254R1KM8",
+        "S3OriginConfig": {
+          "OriginAccessIdentity": ""
+        }
+      }
+    ]
+  },
+  "OriginGroups": {
+    "Quantity": 1,
+    "Items": [
+      {
+        "Id": "WizardOriginGroup",
+        "FailoverCriteria": {
+          "StatusCodes": {
+            "Quantity": 6,
+            "Items": [403, 404, 500, 502, 503, 504]
+          }
+        },
+        "Members": {
+          "Quantity": 2,
+          "Items": [
+            { "OriginId": "S3-Primary-sa-east-1" },
+            { "OriginId": "S3-Failover-us-east-1" }
+          ]
+        }
+      }
+    ]
+  },
+  "DefaultCacheBehavior": {
+    "TargetOriginId": "WizardOriginGroup",
+    "ViewerProtocolPolicy": "redirect-to-https",
+    "AllowedMethods": {
+      "Quantity": 2,
+      "Items": ["GET", "HEAD"],
+      "CachedMethods": {
+        "Quantity": 2,
+        "Items": ["GET", "HEAD"]
+      }
+    },
+    "ForwardedValues": {
+      "QueryString": false,
+      "Cookies": { "Forward": "none" }
+    },
+    "MinTTL": 0,
+    "DefaultTTL": 86400,
+    "MaxTTL": 31536000,
+    "Compress": true
+  },
+  "Enabled": true
+}
